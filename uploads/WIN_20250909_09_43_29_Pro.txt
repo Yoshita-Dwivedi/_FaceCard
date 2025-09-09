@@ -1,4 +1,0 @@
-Type: Teacher
-Name: MKJ
-Institute: Lucknow
-Subject: ece
