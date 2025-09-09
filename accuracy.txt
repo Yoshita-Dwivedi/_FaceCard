@@ -1,0 +1,33 @@
+def find_present_students(class_photo_path, known_encodings, known_data):
+    # ...
+    try:
+        # Load the class photo
+        class_image = face_recognition.load_image_file(class_photo_path)
+        
+        # Find all face locations using the more accurate CNN model
+        # CHANGE THIS LINE:
+        unknown_face_locations = face_recognition.face_locations(class_image, model="cnn") 
+        
+        unknown_face_encodings = face_recognition.face_encodings(class_image, unknown_face_locations)
+        # ...
+```
+
+---
+
+### 4. Advanced Technique: Provide Multiple "Known" Images
+
+A person's face can look different in various photos (e.g., with/without glasses, different hairstyles). You can significantly improve reliability by providing multiple reference images for each student.
+
+**How to implement this:**
+
+1.  **Change your folder structure.** Instead of one `data` folder, create subfolders for each student:
+    ```
+    data/
+    ├── Amit_Kumar/
+    │   ├── amit1.jpg
+    │   └── amit2.png
+    ├── Priya_Sharma/
+    │   └── priya_photo.jpg
+    └── ...
+    
+

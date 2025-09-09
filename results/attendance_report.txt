@@ -1,0 +1,6 @@
+--- Attendance Report ---
+Processed from photo: WIN_20250909_09_43_29_Pro.jpg
+
+Present Students:
+ - Name: Abhinav, Unique ID: 02
+ - Name: Yoshita, Unique ID: 03

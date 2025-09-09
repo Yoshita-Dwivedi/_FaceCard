@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <main class="container">
+        <nav class="nav-links">
+    <a href="/teacher" class="active">Teacher</a>
+    <a href="/student">Student</a>
+</nav>
+        <div class="form-container">
+            <h2>Teacher Details</h2>
+            <form id="teacherForm">
+                <div class="input-group">
+                    <label for="teacherName">Full Name</label>
+                    <input type="text" id="teacherName" name="teacherName" required>
+                </div>
+                <div class="input-group">
+                    <label for="instituteName">Institute Name</label>
+                    <input type="text" id="instituteName" name="instituteName" required>
+                </div>
+                <div class="input-group">
+                    <label for="subject">Subject</label>
+                    <input type="text" id="subject" name="subject" required>
+                </div>
+                <div class="input-group">
+                    <label for="classImage">Upload Class Image</label>
+                    <input type="file" id="classImage" name="classImage" accept="image/*" required>
+                </div>
+                <p id="errorMessage" class="error-message"></p>
+                <button type="submit" class="submit-btn">Submit</button>
+            </form>
+        </div>
+    </main>
+
+   <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const teacherForm = document.getElementById('teacherForm');
+        const errorMessage = document.getElementById('errorMessage');
+
+        teacherForm.addEventListener('submit', (event) => {
+            event.preventDefault(); // Stop the form from submitting the old way
+            
+            // Use FormData to easily handle file uploads
+            const formData = new FormData(teacherForm);
+
+            // Send the data to your Python server
+            fetch('/submit-teacher', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Teacher data saved successfully!');
+                    teacherForm.reset(); // Clear the form
+                    errorMessage.textContent = '';
+                } else {
+                    errorMessage.textContent = 'Failed to save data. Please try again.';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                errorMessage.textContent = 'An error occurred. Check the console.';
+            });
+        });
+    });
+</script>
+</body>
+</html>
