@@ -13,6 +13,7 @@ import numpy as np
 TEACHER_FOLDER = 'uploads'
 
 STUDENT_FOLDER = 'data'
+RESULTS_FOLDER = 'results'
 
 # The tolerance for face comparison. Lower is stricter. 0.6 is a good default.
 

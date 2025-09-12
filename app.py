@@ -72,27 +72,46 @@ def submit_teacher():
 @app.route('/submit-student', methods=['POST'])
 def submit_student():
     try:
+        # Get text data from the form
         name = request.form['studentName']
         roll_no = request.form['rollNo']
+        
+        # --- THIS IS THE FIX ---
+        # Get phone number from 'request.form', not 'request.files'
+        phone_no = request.form['phoneno'] 
+
+        # Get the image file from 'request.files'
         image = request.files['studentImage']
 
         if image and image.filename != '':
+            # Secure the filename before saving (optional but good practice)
+            # from werkzeug.utils import secure_filename
+            # filename = secure_filename(image.filename)
+            
             image_path = os.path.join(app.config['DATA_FOLDER'], image.filename)
             image.save(image_path)
             
             info_filename = os.path.splitext(image.filename)[0] + '.txt'
             info_path = os.path.join(app.config['DATA_FOLDER'], info_filename)
+            
             with open(info_path, 'w') as f:
                 f.write(f"Type: Student\n")
                 f.write(f"Name: {name}\n")
                 f.write(f"Roll No: {roll_no}\n")
+                # Now this line will work correctly
+                f.write(f"Phone No: {phone_no}\n") 
             
-            return jsonify({'success': True, 'message': 'Data saved successfully!'})
+            return jsonify({'success': True, 'message': 'Student data saved successfully!'})
+        
         return jsonify({'success': False, 'message': 'No image selected.'})
-    except Exception as e:
-        print(f"An error occurred: {e}")
-        return jsonify({'success': False, 'message': 'An error occurred.'})
 
+    except KeyError as e:
+        # More specific error for debugging
+        print(f"KeyError: Make sure the form field name '{e}' matches your HTML.")
+        return jsonify({'success': False, 'message': f'Missing form field: {e}'})
+    except Exception as e:
+        print(f"An error occurred in /submit-student: {e}")
+        return jsonify({'success': False, 'message': 'An internal server error occurred.'})
 # --- API Endpoints for Attendance ---
 
 @app.route('/run-attendance', methods=['POST'])
@@ -141,3 +160,4 @@ def get_latest_report():
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
 
+ 

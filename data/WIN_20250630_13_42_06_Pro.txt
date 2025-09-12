@@ -1,3 +1,0 @@
-Type: Student
-Name: Abhinav
-Roll No: 02

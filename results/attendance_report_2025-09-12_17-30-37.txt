@@ -1,0 +1,5 @@
+--- Attendance Report (2025-09-12_17-30-37) ---
+Processed from photo: photo_2025-08-28_22-16-45.jpg
+
+Present Students:
+ - Name: Abhinav, Unique ID: 2324
