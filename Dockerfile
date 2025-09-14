@@ -1,3 +1,7 @@
+# Enable swap to reduce OOM errors
+RUN fallocate -l 4G /swapfile && chmod 600 /swapfile && mkswap /swapfile && swapon /swapfile
+
+
 # Base Python image (3.10 works with dlib & face_recognition)
 FROM python:3.10-slim
 
