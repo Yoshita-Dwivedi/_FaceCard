@@ -1,39 +1,25 @@
-# Enable swap to reduce OOM errors
-RUN fallocate -l 4G /swapfile && chmod 600 /swapfile && mkswap /swapfile && swapon /swapfile
-
-
-# Base Python image (3.10 works with dlib & face_recognition)
+# Base image
 FROM python:3.10-slim
 
-# Install system dependencies required for dlib and opencv
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    cmake \
-    gfortran \
-    libopenblas-dev \
-    liblapack-dev \
-    libx11-dev \
-    libgtk2.0-dev \
-    libjpeg-dev \
-    libpng-dev \
-    python3-dev \
-    && rm -rf /var/lib/apt/lists/*
+# Enable swap to reduce OOM errors
+RUN apt-get update && apt-get install -y util-linux \
+    && fallocate -l 4G /swapfile && chmod 600 /swapfile \
+    && mkswap /swapfile && swapon /swapfile
 
-# Set work directory
+# Set working directory
 WORKDIR /app
 
-# Copy requirements first
+# Copy requirements first for caching
 COPY requirements.txt .
 
-# Install Python dependencies
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the whole project
+# Copy project files
 COPY . .
 
-# Expose Flask/Gunicorn port
-EXPOSE 8080
+# Expose port
+EXPOSE 5000
 
-# Run app with Gunicorn (change app:app if entry point differs)
-CMD ["gunicorn", "-b", "0.0.0.0:8080", "app:app"]
+# Run the app
+CMD ["python", "app.py"]
